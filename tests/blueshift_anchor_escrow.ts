@@ -1,8 +1,8 @@
-import {before , describe, test, it} from "node:test";
+import {before , describe, test } from "node:test";
 import assert from "node:assert";
 
-import * as ProgramClient from "../clients/generated/js/src";
-import { getEscrowDecoder, ESCROW_DISCRIMINATOR } from "../clients/generated/js/src"; // get_program_name_decoder and discr
+import * as ProgramClient from "../dist/js-client";
+import { getEscrowDecoder, ESCROW_DISCRIMINATOR } from "../dist/js-client"; // get_program_name_decoder and discr
 
 import { type KeyPairSigner, type Address, MaybeAccount } from "@solana/kit";
 import { connect, Connection } from "solana-kite";
@@ -15,15 +15,24 @@ export const stringify = (object: any) => {
 }
 
 describe('election', () => { 
+
     // configure the client to use a local cluster
     let alice: KeyPairSigner;
     let bob: KeyPairSigner;
     let escrow: Address;
     let connection: Connection;
-    let createEscrow: 
+    // let createEscrow: ;
 
     before(async() => {
         // connect to local cluster
+        connection = await connect();
+        [alice, bob] = await connection.createWallets(2);
+
+        // initalize escrow pda
+        const escrowBumpAndPda = await connection.getPDAAndBump(ProgramClient.BLUESHIFT_ANCHOR_ESCROW_PROGRAM_ADDRESS, ["escrow", alice.address, "seedle"]);
+
+        // we need to get ata for the escrow -> vault where we store maker(alice) amount etc
+        
     });
 
     test("Alice make request", async() => {});
